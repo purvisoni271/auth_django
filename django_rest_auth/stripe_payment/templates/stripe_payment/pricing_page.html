@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Django + Stripe Checkout</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <section>
+      <p class="title">Pricing Plans</p>
+      <div class="columns">
+        {% for product in products %}
+          <div class="column">
+            <p class="subtitle">{{ product.name }}</p>
+            {% for plan in product.plan_set.all %}
+              <div>
+                <p class="heading">{{ plan.nickname }}</p>
+                <p>{{ plan.human_readable_price }}</p>
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  </body>
+</html>

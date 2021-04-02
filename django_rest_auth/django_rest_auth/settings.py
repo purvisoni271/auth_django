@@ -43,6 +43,12 @@ INSTALLED_APPS = [
     'django_rest_resetpassword',
     'drf_yasg',
     'stripe_payment',
+    'djstripe',
+    'stripe_subscription',
+    # 'paypal_payment',
+    'paypal.standard.ipn',
+    'crispy_forms',
+    'paypal_payment.apps.PaypalPaymentConfig'
 ]
 
 MIDDLEWARE = [
@@ -80,20 +86,20 @@ WSGI_APPLICATION = 'django_rest_auth.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config('DATABASE_URL')
-}
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'rest_auth',
-#         'USER': 'admin',
-#         'PASSWORD': 'admin',
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
+#     'default': dj_database_url.config('DATABASE_URL')
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'rest_auth',
+        'USER': 'admin',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -164,4 +170,14 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51IYmNtSAfNxM2KGToqG0oWv6EDg0ZT3ekX9RvLOOdLbvweFeakxWO9rIxr8sglRz7U19gdIZ4zYuTpsiSxrsfIh100PYRnWj7P'
 STRIPE_SECRET_KEY = 'sk_test_51IYmNtSAfNxM2KGTAuE6zOUi10h2784XF1xCoopKEnNZt25G5K5tBtQYbWcDW66ECgNeD7ACdWn6rwgaMl4rxpfv00egIRqA8T'
-STRIPE_ENDPOINT_SECRET = 'https://github.com/stripe/stripe-cli'
+# STRIPE_ENDPOINT_SECRET = 'http://192.168.1.17:8000/stripe/webhook'
+STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "sk_test_51IYmNtSAfNxM2KGTAuE6zOUi10h2784XF1xCoopKEnNZt25G5K5tBtQYbWcDW66ECgNeD7ACdWn6rwgaMl4rxpfv00egIRqA8T")
+STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY", "pk_test_51IYmNtSAfNxM2KGToqG0oWv6EDg0ZT3ekX9RvLOOdLbvweFeakxWO9rIxr8sglRz7U19gdIZ4zYuTpsiSxrsfIh100PYRnWj7P")
+STRIPE_LIVE_MODE = False
+DJSTRIPE_WEBHOOK_SECRET = "whsec_AgFzSkt0qg8dIsBgeHwvaC8wt35hJIYK"
+DJSTRIPE_USE_NATIVE_JSONFIELD = True
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
+
+PAYPAL_TEST = True
+PAYPAL_RECEIVER_EMAIL = 'sb-vquf35766370@business.example.com'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

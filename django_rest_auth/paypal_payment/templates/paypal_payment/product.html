@@ -1,0 +1,68 @@
+{% extends 'paypal_payment/base.html' %}
+{% load static %}
+{% block content %}
+  <div class="container mt-5">
+    <h3>Products</h3>
+    <div class="row">
+      {% for product in product %}
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-header bg-secondary">
+              <p class="text-white">{{ product.product_name }}</p>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <img src="{{ product.product_image.url }}" width="150px"  height="140px" />
+                </div>
+              <p class="text-justify">{{ product.product_description }}</p>
+              <p class="text-justify"><strong>Product Price</strong> $ {{ product.product_price }}</p>
+              <p class="text-justify"><strong>Quantity</strong> {{ product.product_quantity }}</p>
+            </div>
+            <div class="card-footer">
+              <div id="paypal-button-container" data-price={{ product.product_price }}></div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+<script>
+        // Render the PayPal button into #paypal-button-container
+        document.querySelectorAll('#paypal-button-container').forEach(function(selector){
+          paypal.Buttons({
+              style: {
+                  shape: 'rect',
+                  color: 'blue',
+                  layout: 'vertical',
+                  label: 'subscribe'
+              },
+              // Set up the transaction
+              createOrder: function(data, actions) {
+                  return actions.order.create({
+                      purchase_units: [{
+                          amount: {
+                              value: selector.dataset.price
+                          }
+                      }]
+                  });
+              },
+
+              // Finalize the transaction
+              onApprove: function(data, actions) {
+                  return actions.order.capture().then(function(details) {
+                      // Show a success message to the buyer
+                      alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                  });
+              }
+
+
+          }).render(selector);
+        })
+   </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  {% endblock %}

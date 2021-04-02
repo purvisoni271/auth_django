@@ -24,6 +24,8 @@ from drf_yasg import openapi
 from rest_framework.routers import DefaultRouter
 from auth_rest_app.views import *
 from stripe_payment.views import *
+from stripe_subscription.views import *
+from paypal_payment.views import *
 
 router = DefaultRouter()
 
@@ -53,5 +55,9 @@ urlpatterns = [
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
+    path("stripe/", include("djstripe.urls", namespace="djstripe")),
+    path("subscription/", include('stripe_subscription.urls')),
+    path('paypal/', include('paypal_payment.urls')),
+    path('paypal/', include('paypal.standard.ipn.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

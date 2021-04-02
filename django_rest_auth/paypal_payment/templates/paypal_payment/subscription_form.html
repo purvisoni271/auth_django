@@ -1,0 +1,11 @@
+{% extends 'paypal_payment/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ f|crispy }}
+        <input class="btn btn-primary" type="submit" value="Subscribe">
+    </form>
+</div>
+{% endblock %}
